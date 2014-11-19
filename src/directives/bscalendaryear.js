@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc directive
- * @name angularBootstrapCalendarApp.directive:mwlCalendarYear
+ * @name angularBootstrapCalendarApp.directive:bsCalendarYear
  * @description
- * # mwlCalendarYear
+ * # bsCalendarYear
  */
-angular.module('mwl.calendar')
-  .directive('mwlCalendarYear', function($sce, $timeout, calendarHelper, moment) {
+angular.module('bs.calendar')
+  .directive('bsCalendarYear', function($sce, $timeout, calendarHelper, moment) {
     return {
       templateUrl: 'templates/year.html',
       restrict: 'EA',
-      require: '^mwlCalendar',
+      require: '^bsCalendar',
       scope: {
         events: '=calendarEvents',
         currentDay: '=calendarCurrentDay',

@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('mwl.calendar')
+angular.module('bs.calendar')
   .filter('truncateEventTitle', function() {
 
     return function(string, length, boxHeight) {

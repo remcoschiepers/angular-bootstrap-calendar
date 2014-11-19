@@ -7,7 +7,7 @@
  * # calendarHelper
  * Service in the angularBootstrapCalendarApp.
  */
-angular.module('mwl.calendar')
+angular.module('bs.calendar')
   .service('calendarHelper', function calendarHelper($filter, moment) {
 
     var self = this;

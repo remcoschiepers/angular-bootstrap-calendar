@@ -2,15 +2,16 @@
 
 /**
  * @ngdoc directive
- * @name angularBootstrapCalendarApp.directive:mwlCalendar
+ * @name angularBootstrapCalendarApp.directive:bsCalendar
  * @description
- * # mwlCalendar
+ * # bsCalendar
  */
-angular.module('mwl.calendar')
-  .directive('mwlCalendar', function (moment) {
+angular.module('bs.calendar')
+  .directive('bsCalendar', function (moment) {
     return {
       templateUrl: 'templates/main.html',
       restrict: 'EA',
+      transclude: true,
       scope: {
         events: '=calendarEvents',
         view: '=calendarView',

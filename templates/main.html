@@ -1,6 +1,6 @@
 <div class="cal-context" style="width: 100%;">
 
-  <mwl-calendar-year
+  <bs-calendar-year
     calendar-events="events"
     calendar-current-day="currentDay"
     calendar-event-click="eventClick"
@@ -10,9 +10,9 @@
     calendar-delete-event-html="deleteEventHtml"
     calendar-auto-open="autoOpen"
     ng-if="view == 'year'"
-  ></mwl-calendar-year>
+  ></bs-calendar-year>
 
-  <mwl-calendar-month
+  <bs-calendar-month
     calendar-events="events"
     calendar-current-day="currentDay"
     calendar-event-click="eventClick"
@@ -23,20 +23,20 @@
     calendar-auto-open="autoOpen"
     calendar-use-iso-week="useIsoWeek"
     ng-if="view == 'month'"
-    ></mwl-calendar-month>
+    ></bs-calendar-month>
 
-  <mwl-calendar-week
+  <bs-calendar-week
     calendar-events="events"
     calendar-current-day="currentDay"
     calendar-event-click="eventClick"
     calendar-use-iso-week="useIsoWeek"
     ng-if="view == 'week'"
-    ></mwl-calendar-week>
+    ></bs-calendar-week>
 
-  <mwl-calendar-day
+  <bs-calendar-day
     calendar-events="events"
     calendar-current-day="currentDay"
     calendar-event-click="eventClick"
     ng-if="view == 'day'"
-    ></mwl-calendar-day>
+    ></bs-calendar-day>
 </div>

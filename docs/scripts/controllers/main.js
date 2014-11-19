@@ -7,35 +7,58 @@
  * # MainCtrl
  * Controller of the angularBootstrapCalendarApp
  */
-angular.module('mwl.calendar')
-  .controller('MainCtrl', function ($scope, $modal, moment) {
+angular.module('bs.calendar')
+  .controller('MainCtrl', function ($scope, $modal, moment, CalendarService) {
 
     var currentYear = moment().year();
     var currentMonth = moment().month();
+    $scope.getGcalEvents = CalendarService.getGcalEvents;
+    $scope.transformRes = CalendarService.transformRes;
 
-    $scope.events = [
-      {
-        title: 'Event 1',
-        type: 'warning',
-        starts_at: new Date(currentYear,currentMonth,25,8,30),
-        ends_at: new Date(currentYear,currentMonth,25,9,30)
-      },
-      {
-        title: 'Event 2',
-        type: 'info',
-        starts_at: new Date(currentYear,currentMonth,19,7,30),
-        ends_at: new Date(currentYear,currentMonth,25,9,30)
-      },
-      {
-        title: 'This is a really long event title',
-        type: 'important',
-        starts_at: new Date(currentYear,currentMonth,25,6,30),
-        ends_at: new Date(currentYear,currentMonth,25,6,60)
-      },
-    ];
+    $scope.init = function () {
+      var req1Params = {
+        cal: 'h27jit74b8la1oj47538np3mvg',
+        q : {
+          singleEvents: true
+        }
+      };
+      var req2Params = {
+        cal: 'h27jit74b8la1oj47538np3mvg',
+        q : {
+          singleEvents: false
+        }
+      }
+
+      $scope.events = $scope.getGcalEvents(req1Params).then(
+          // success
+          function (data) {
+            $scope.events = $scope.transformRes(data)
+          },
+          // error
+          function (data) {
+          }
+        )
+        .then(
+          function (data) {
+            $scope.getGcalEvents(req2Params).then(
+              // success
+              function (data) {
+                $scope.events = $scope.events.concat( $scope.transformRes(data) );
+              },
+              // error
+              function (data) {
+                console.log('error')
+              }
+            )
+          }
+        )
+    }
+
+    $scope.init();
+    $scope.events = [];
 
     $scope.calendarView = 'month';
-    $scope.calendarDay = new Date();
+    $scope.calendarDay = new moment();
 
     function showModal(action, event) {
       $modal.open({
@@ -70,7 +93,53 @@ angular.module('mwl.calendar')
 
       event[field] = !event[field];
     };
+  })
+  .factory('CalendarService', function ($http, $filter) {
+    var calendarService = {};
 
+    calendarService.getGcalEvents = function (params) {
+      return $http({
+          url: 'https://www.googleapis.com/calendar/v3/calendars/'+params.cal+'@group.calendar.google.com/events',
+          method: "GET",
+          params: {
+              singleEvents: params.q.singleEvents,
+              showHiddenInvitations: true,
+              key: 'AIzaSyB8ijjKige6h_zN38bbsYBCOaC1m4v9IO0',
+              timeMin: moment().subtract('month', 1).toISOString()
+            }
+        })
+        .then(
+          function (res) {
+            return res.data;
+          },
+          function (res) {
+            return res.data;
+          }
+        );
+    };
 
+    calendarService.transformRes = function (data) {
+      data.items = $filter('filter')(data.items, function (item) {
+        return item.status !== 'cancelled';
+      });
 
+      return data.items.map( function(item) {
+        var newItem = {};
+        if ( ! item.hasOwnProperty('start') ) {
+          return;
+        }
+        if ( item.start.hasOwnProperty('date') ) {
+          newItem.allday = true;
+          // is all day event
+        }
+        newItem.title = item.summary;
+        newItem.type = item.organizer.displayName;
+        newItem.starts_at = ( item.start.hasOwnProperty('date') ) ? moment(item.start.date)._d : moment(item.start.dateTime)._d;
+        newItem.ends_at = ( item.start.hasOwnProperty('date') ) ? moment(item.end.date)._d : moment(item.start.dateTime)._d;
+
+        return newItem;
+      });
+    }
+
+    return calendarService;
   });

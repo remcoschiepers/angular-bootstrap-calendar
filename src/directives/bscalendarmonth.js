@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc directive
- * @name angularBootstrapCalendarApp.directive:mwlCalendarMonth
+ * @name angularBootstrapCalendarApp.directive:bsCalendarMonth
  * @description
- * # mwlCalendarMonth
+ * # bsCalendarMonth
  */
-angular.module('mwl.calendar')
-  .directive('mwlCalendarMonth', function ($sce, $timeout, calendarHelper) {
+angular.module('bs.calendar')
+  .directive('bsCalendarMonth', function ($sce, $timeout, calendarHelper) {
     return {
       templateUrl: 'templates/month.html',
       restrict: 'EA',
-      require: '^mwlCalendar',
+      require: '^bsCalendar',
       scope: {
         events: '=calendarEvents',
         currentDay: '=calendarCurrentDay',
@@ -35,7 +35,6 @@ angular.module('mwl.calendar')
 
         function updateView() {
           scope.view = calendarHelper.getMonthView(scope.events, scope.currentDay, scope.useIsoWeek);
-
           //Auto open the calendar to the current day if set
           if (scope.autoOpen && !firstRun) {
             scope.view.forEach(function(week, rowIndex) {
@@ -64,6 +63,10 @@ angular.module('mwl.calendar')
           scope.openEvents = handler.openEvents;
 
         };
+
+        scope.$watch('openEvents', function () {
+          scope.$broadcast('resize:event-list');
+        });
 
         scope.drillDown = function(day) {
           calendarCtrl.changeView('day', moment(scope.currentDay).clone().date(day).toDate());

@@ -9,6 +9,7 @@
  * Main module of the application.
  */
 angular
-  .module('mwl.calendar', [
-    'ui.bootstrap'
+  .module('bs.calendar', [
+    'ui.bootstrap',
+    'ngScrollbar'
   ]);

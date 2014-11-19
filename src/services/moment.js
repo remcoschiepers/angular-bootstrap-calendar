@@ -7,5 +7,5 @@
  * # moment
  * Constant in the angularBootstrapCalendarApp.
  */
-angular.module('mwl.calendar')
+angular.module('bs.calendar')
   .constant('moment', window.moment);
